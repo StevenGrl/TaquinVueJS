@@ -34,7 +34,7 @@
               @click="shuffle()"
                name="button">Shuffle</button>
             </div>
-            <!-- <p v-if="winMessage" class="text-center alert alert-success">You win the game!</p> -->
+            <p v-if="game.win" class="text-center alert alert-success">{{game.win}}</p>
             <div class="text-center grid offset-4 my-5">
                 <!-- Lignes -->
                 <div v-for="(row, rowIndex) in size" :key="rowIndex" class="d-inline">

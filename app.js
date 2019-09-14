@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = new Vue({
         el: '#game',
         data: () => ({
-            title: 'Taquin V1.0',
+            title: 'Taquin V1.1',
             game: [],
             size: 4
         }),
@@ -64,9 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
                       this.moveUp(row, col)
                     }
                   }
-                  // Si la case est sur la colonne
                 }
               }
+              // console.log('grid ' + this.game.grid)
+              // console.log('wingrid ' + this.game.winGrid)
+              // if (this.game.grid === this.game.winGrid) {
+              //   this.game.win = 'Vous avez gagné !';
+              // } else {
+              //   this.game.win = null
+              // }
               this.$forceUpdate();
             },
             shuffle() {
@@ -74,15 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 for(let j = this.game.grid.length - 1; j >= 0; j--) {
                   let rand = Math.floor(Math.random() * Math.floor(i))
                   let currentPawn = this.game.grid[i][j]
-                  this.game.grid[i][j] = this.game.grid[i][rand]
-                  this.game.grid[i][rand] = currentPawn
-                  if (currentPawn == null) {
-                    console.log('null1')
+                  this.game.grid[i][j] = this.game.grid[rand][j]
+                  this.game.grid[rand][j] = currentPawn
+                  if (this.game.grid[i][j] == null) {
+                    console.log('null 1')
                     this.game.empty[0].i = i
-                    this.game.empty[0].j = rand
-                  } else if (this.game.grid[i][rand] == null) {
+                    this.game.empty[0].j = j
+                  } else if (this.game.grid[rand][j] == null) {
                     console.log('null 2')
-                    this.game.empty[0].i = i
+                    this.game.empty[0].i = rand
                     this.game.empty[0].j = j
                   }
                 }
@@ -97,8 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 class GameGrid {
     constructor(size) {
+        this.win = null;
         this.empty = [];
         this.grid = [];
+        this.winGrid = [];
         let row = [];
         let cpt = 1;
         for (let i = 0; i < size; i++) {
@@ -113,6 +121,7 @@ class GameGrid {
             }
           }
           this.grid.push(row);
+          this.winGrid.push(row);
         }
     }
 }
