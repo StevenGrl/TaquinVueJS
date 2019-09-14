@@ -29,6 +29,11 @@
         <!-- Taquin -->
         <div id="game" class="container my-5">
             <h1 class="text-center">{{ title }}</h1>
+            <div class="text-center">
+              <button class="btn btn-primary" type="button"
+              @click="shuffle()"
+               name="button">Shuffle</button>
+            </div>
             <!-- <p v-if="winMessage" class="text-center alert alert-success">You win the game!</p> -->
             <div class="text-center grid offset-4 my-5">
                 <!-- Lignes -->

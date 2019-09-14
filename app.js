@@ -68,6 +68,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
               }
               this.$forceUpdate();
+            },
+            shuffle() {
+              for(let i = this.game.grid.length - 1; i >= 0; i--) {
+                for(let j = this.game.grid.length - 1; j >= 0; j--) {
+                  let rand = Math.floor(Math.random() * Math.floor(i))
+                  let currentPawn = this.game.grid[i][j]
+                  this.game.grid[i][j] = this.game.grid[i][rand]
+                  this.game.grid[i][rand] = currentPawn
+                  if (currentPawn == null) {
+                    console.log('null1')
+                    this.game.empty[0].i = i
+                    this.game.empty[0].j = rand
+                  } else if (this.game.grid[i][rand] == null) {
+                    console.log('null 2')
+                    this.game.empty[0].i = i
+                    this.game.empty[0].j = j
+                  }
+                }
+              }
+              console.log(this.game.grid)
+              console.log(this.game.empty[0])
+              this.$forceUpdate();
             }
         }
     })
