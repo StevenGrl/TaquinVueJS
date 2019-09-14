@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
               this.game.empty[0].j = col
             },
             moveDown(row, col) {
-              for(let i = row; i < this.game.empty[0].i; i++) {
-                this.game.grid[i + 1][col] = this.game.grid[i][col]
+              for(let i = this.game.empty[0].i; i > row; i--) {
+                this.game.grid[i][col] = this.game.grid[i - 1][col]
               }
               this.game.grid[row][col] = null
               this.game.empty[0].i = row
