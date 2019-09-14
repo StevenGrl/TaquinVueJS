@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
         data: () => ({
             title: 'Taquin V1.1',
             game: [],
-            size: 4
+            size: 4,
+            win: "Vous avez gagné !"
         }),
         created: function () {
             this.createGame();
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             moveLeft(row, col) {
               for(let i = this.game.empty[0].j; i < col; i++) {
                 this.game.grid[row][i] = this.game.grid[row][i + 1]
+                this.game.cpt++;
               }
               this.game.grid[row][col] = null
               this.game.empty[0].i = row
@@ -24,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             moveRight(row, col) {
               for(let i = this.game.empty[0].j; i > col; i--) {
                 this.game.grid[row][i] = this.game.grid[row][i - 1]
+                this.game.cpt++;
               }
               this.game.grid[row][col] = null
               this.game.empty[0].i = row
@@ -32,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
             moveUp(row, col) {
               for(let i = this.game.empty[0].i; i < row; i++) {
                 this.game.grid[i][col] = this.game.grid[i + 1][col]
+                this.game.cpt++;
               }
               this.game.grid[row][col] = null
               this.game.empty[0].i = row
@@ -40,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             moveDown(row, col) {
               for(let i = this.game.empty[0].i; i > row; i--) {
                 this.game.grid[i][col] = this.game.grid[i - 1][col]
+                this.game.cpt++;
               }
               this.game.grid[row][col] = null
               this.game.empty[0].i = row
@@ -66,16 +71,20 @@ document.addEventListener('DOMContentLoaded', () => {
                   }
                 }
               }
-              // console.log('grid ' + this.game.grid)
-              // console.log('wingrid ' + this.game.winGrid)
-              // if (this.game.grid === this.game.winGrid) {
-              //   this.game.win = 'Vous avez gagné !';
-              // } else {
-              //   this.game.win = null
-              // }
+              for(let i = 0; i < this.game.size; i++) {
+                for(let j = 0; j < this.game.size; j++) {
+                  if (this.game.grid[i][j] != this.game.winGrid[i][j]) {
+                    this.game.win = false;
+                    break;
+                  } else if (i == this.game.size - 1 && j == this.game.size - 1) {
+                    this.game.win = true;
+                  }
+                }
+              }
               this.$forceUpdate();
             },
             shuffle() {
+              this.game.cpt = 0;
               for(let i = this.game.grid.length - 1; i >= 0; i--) {
                 for(let j = this.game.grid.length - 1; j >= 0; j--) {
                   let rand = Math.floor(Math.random() * Math.floor(i))
@@ -83,18 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
                   this.game.grid[i][j] = this.game.grid[rand][j]
                   this.game.grid[rand][j] = currentPawn
                   if (this.game.grid[i][j] == null) {
-                    console.log('null 1')
                     this.game.empty[0].i = i
                     this.game.empty[0].j = j
                   } else if (this.game.grid[rand][j] == null) {
-                    console.log('null 2')
                     this.game.empty[0].i = rand
                     this.game.empty[0].j = j
                   }
                 }
               }
-              console.log(this.game.grid)
-              console.log(this.game.empty[0])
               this.$forceUpdate();
             }
         }
@@ -103,25 +108,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 class GameGrid {
     constructor(size) {
-        this.win = null;
+        this.win = false;
+        this.cpt = 0;
         this.empty = [];
         this.grid = [];
         this.winGrid = [];
+        this.size = size;
         let row = [];
+        let winRow = [];
         let cpt = 1;
         for (let i = 0; i < size; i++) {
           row = [];
+          winRow = [];
           for (let j = 0; j < size; j++) {
             if (i == size - 1 && j == size - 1) {
                 this.empty.push({i,j})
                 row.push(null);
+                winRow.push(null);
             } else {
                 row.push(cpt);
+                winRow.push(cpt);
                 cpt++;
             }
           }
           this.grid.push(row);
-          this.winGrid.push(row);
+          this.winGrid.push(winRow);
         }
     }
 }
